@@ -81,7 +81,6 @@ std::vector<Student*> Deanery::createStudentsFromFile() {
         groupPtr = findGroup(groupTitle);
 
         createdStudent = new Student(studentID, name, surname, patronymic);
-        createdStudent->enrollToGroup(*groupPtr);
 
         while (stringStream >> token) {
             isMark10 = token.length() == 2 && token[0] == 1 && token[1] == 0;
@@ -126,7 +125,7 @@ void Deanery::saveStudentsFile() const {
                           + student->getName() + " "
                           + student->getSurname() + " "
                           + student->getPatronymic() + " "
-                          + student->getGroup();
+                          + student->getGroup()->getTitle();
             for (int mark : student->getMarks()) {
                 studentLine.append(" " + std::to_string(mark));
             }
@@ -292,7 +291,7 @@ void Deanery::printPerformanceData() const {
 void Deanery::transferToGroup(const std::vector<Student*>& students, Group &group) const {
     for (Student* student : students) {
         if (!group.checkStudentPresence(*student)) {
-            group.addStudent(*student);
+            group.addStudent(student);
         }
     }
 }
@@ -352,7 +351,6 @@ void Deanery::loadDataFromFile() {
 
     createGroupsFromFile();
     createStudentsFromFile();
-    initGroupFieldsLinks();
 }
 
 void Deanery::saveDataToFile() {

@@ -7,7 +7,7 @@
 #include "../include/Exception.h"
 
 Group::Group(std::string& title) {
-    if (occupiedTitles.find(&title) != occupiedTitles.end()) {
+    if (Group::occupiedTitles.find(&title) != Group::occupiedTitles.end()) {
         this->title = title;
     } else {
         throw DuplicatedGroupTitleException(std::string("Duplicated group title: got " + title));
@@ -65,14 +65,17 @@ std::string Group::getHead(char separator) const {
     }
 }
 
-void Group::addStudent(Student& student) {
+void Group::addStudent(Student* student) {
     for (Student* studentPtr : students) {
-        if (studentPtr == &student) {
+        if (studentPtr == student) {
             std::cerr << "Error: student already presents in this group." << std::endl;
+        }
+        if (student->getId() == headID) {
+            this->head = student;
         }
     }
 
-    students.push_back(&student);
+    students.push_back(student);
 }
 
 void Group::removeStudent(Student& student) {
@@ -94,9 +97,11 @@ void Group::electHead() {
     if (students.empty()) {
         std::cerr << "Error electing head: group " << title << " is empty." << std::endl;
         this->head = nullptr;
+        return;
     }
 
     this->head = students[rand() % students.size()];
+    this->headID = this->head->getId();
 }
 
 Student* Group::searchStudent(int studentID) const {
@@ -180,4 +185,8 @@ void Group::addToStudentsIDs(int id) {
     } else {
         throw InvalidIDException(std::string("Invalid head's id: it must not be negative."));
     }
+}
+
+std::vector<int> Group::getStudentsIDs() const {
+    return this->studentsIDs;
 }

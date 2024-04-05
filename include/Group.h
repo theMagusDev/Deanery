@@ -16,6 +16,8 @@ enum class Specialization {
     HUMANITIES
 };
 
+class Student;
+
 class Group {
  public:
     Group(std::string& title);
@@ -30,8 +32,9 @@ class Group {
     int getHeadID() const;
     void setHeadID(int id);
     void addToStudentsIDs(int id);
+    std::vector<int> getStudentsIDs() const;
 
-    void addStudent(Student& student);
+    void addStudent(Student* student);
     void removeStudent(Student& student);
     void electHead();
     Student* searchStudent(int studentID) const;

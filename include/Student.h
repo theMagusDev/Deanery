@@ -8,6 +8,8 @@
 #include <unordered_set>
 #include "Group.h"
 
+class Group;
+
 class Student {
  public:
     Student(int id, std::string  name, std::string  surname, std::string  patronymic);

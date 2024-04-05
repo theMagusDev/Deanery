@@ -10,7 +10,7 @@ Student::Student(
     std::string surname,
     std::string patronymic
 ) {
-    bool IDisOccupied = occupiedIDs.find(id) == occupiedIDs.end();
+    bool IDisOccupied = Student::occupiedIDs.find(id) == Student::occupiedIDs.end();
     if (!IDisOccupied && id >= 0) {
         this->id = id;
     } else {

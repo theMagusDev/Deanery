@@ -6,6 +6,9 @@
 #include <vector>
 #include "Group.h"
 
+class Student;
+class Group;
+
 class Deanery {
  public:
     Deanery();
@@ -28,7 +31,6 @@ private:
     void saveGroupsFile() const;
     void clearStudents();
     void clearGroups();
-    void initGroupFieldsLinks();
 };
 
 
