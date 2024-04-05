@@ -101,6 +101,7 @@ std::vector<Student*> Deanery::createStudentsFromFile() {
         fgetsResult = fgets(buffer, maxStudentLineLength, stream);
     }
 
+    fclose(stream);
     delete[] buffer;
 
     return nonAssociatedStudents;
@@ -141,6 +142,7 @@ void Deanery::saveStudentsFile() const {
 
     fseek(stream, 0, SEEK_SET);
     fputs(std::to_string(maxStudentStringLength).c_str(), stream);
+    fclose(stream);
 }
 
 void Deanery::createGroupsFromFile() {
@@ -224,6 +226,7 @@ void Deanery::createGroupsFromFile() {
         fgetsResult = fgets(buffer, maxGroupLineLength, stream);
     }
 
+    fclose(stream);
     delete[] buffer;
 }
 
@@ -260,6 +263,7 @@ void Deanery::saveGroupsFile() const {
 
     fseek(stream, 0, SEEK_SET);
     fputs(std::to_string(maxStudentStringLength).c_str(), stream);
+    fclose(stream);
 }
 
 void Deanery::placeMarksToAllAtRandom(Group* group) const {
