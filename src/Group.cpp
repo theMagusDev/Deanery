@@ -1,10 +1,11 @@
 // Copyright (C) 2024 Yuriy Magus
 
 #include <cstdlib>
-#include <ctime>
 #include <iostream>
 #include "../include/Group.h"
 #include "../include/Exception.h"
+
+std::unordered_set<std::string*> Group::occupiedTitles;
 
 Group::Group(std::string& title) {
     if (Group::occupiedTitles.find(&title) != Group::occupiedTitles.end()) {

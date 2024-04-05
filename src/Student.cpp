@@ -4,6 +4,8 @@
 #include "../include/Student.h"
 #include "../include/Exception.h"
 
+std::unordered_set<int> Student::occupiedIDs;
+
 Student::Student(
     int id,
     std::string name,
