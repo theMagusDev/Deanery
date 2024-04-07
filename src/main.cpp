@@ -437,7 +437,7 @@ void deaneryMethodsDemo() {
     studentsToBeTransferred.push_back(mikhail); // from mbbe1
     studentsToBeTransferred.push_back(olga); // from cst1
     studentsToBeTransferred.push_back(anna); // from math
-    hseDeanery->transferToGroup(studentsToBeTransferred, *cst1);
+    hseDeanery->transferToGroup(studentsToBeTransferred, cst1);
     hseDeanery->printPerformanceData();
     /*
      * <= Performance data =>

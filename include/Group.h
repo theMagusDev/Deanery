@@ -1,11 +1,12 @@
 // Copyright (C) 2024 Yuriy Magus
 
-#ifndef INCLUDE_GROUP_H
-#define INCLUDE_GROUP_H
+#ifndef INCLUDE_GROUP_H_
+#define INCLUDE_GROUP_H_
 
 #include "Student.h"
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 enum class Specialization {
     UNINITIALIZED,
@@ -20,7 +21,7 @@ class Student;
 
 class Group {
  public:
-    Group(std::string title);
+    explicit Group(std::string title);
     Group(std::string title, Specialization spec);
 
     const std::string& getTitle() const;
@@ -36,16 +37,15 @@ class Group {
     std::vector<int> getStudentsIDs() const;
 
     void addStudent(Student* student);
-    void removeStudent(Student& student);
+    void removeStudent(Student* student);
     void electHead();
     void recoverHeadFromID();
     Student* searchStudent(int studentID) const;
     Student* searchStudent(
         std::string name,
         std::string surname,
-        std::string patronymic
-    ) const;
-    bool checkStudentPresence(Student& student);
+        std::string patronymic) const;
+    bool checkStudentPresence(const Student& student);
     double getAverageMark() const;
     void printGroupInfo() const;
 
@@ -53,12 +53,13 @@ class Group {
     std::string title;
     Specialization spec = Specialization::UNINITIALIZED;
     Student* head = nullptr;
-    int headID = -1; // used only for Deanery's createGroupsFromFile()
+    int headID = -1;
     std::vector<Student*> students;
-    std::vector<int> studentsIDs; // used only for Deanery's createGroupsFromFile()
+    std::vector<int> studentsIDs;
+    // headID and studentsIDs are used only for Deanery's createGroupsFromFile()
 
     static std::unordered_set<std::string*> occupiedTitles;
 };
 
 
-#endif // INCLUDE_GROUP_H
+#endif  // INCLUDE_GROUP_H_

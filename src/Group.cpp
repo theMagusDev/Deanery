@@ -91,24 +91,24 @@ void Group::addStudent(Student* student) {
     }
 
     if (student->getGroup() != nullptr && student->getGroup() != this) {
-        student->getGroup()->removeStudent(*student);
+        student->getGroup()->removeStudent(student);
     }
     students.push_back(student);
 }
 
-void Group::removeStudent(Student& student) {
+void Group::removeStudent(Student* student) {
     for (int i = 0; i < students.size(); i++) {
-        if (students[i] == &student) {
+        if (students[i] == student) {
             students.erase(students.begin() + i);
-            student.eraseGroup();
-            if (&student == this->head) {
+            student->eraseGroup();
+            if (student == this->head) {
                 electHead();
             }
             return;
         }
     }
 
-    std::cerr << "Error: no student " << student.getName() << " " + student.getSurname() << " " + student.getPatronymic() << " found." << std::endl;
+    std::cerr << "Error: no student " << student->getFullName() << " found." << std::endl;
 }
 
 void Group::electHead() {
@@ -171,7 +171,7 @@ void Group::printGroupInfo() const {
     std::cout << "Number of students: " << students.size() << std::endl;
 }
 
-bool Group::checkStudentPresence(Student& student) {
+bool Group::checkStudentPresence(const Student& student) {
     for (Student* studentIterator : students) {
         if (studentIterator == &student) {
             return true;

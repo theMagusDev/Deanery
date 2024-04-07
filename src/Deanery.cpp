@@ -29,7 +29,7 @@ Deanery::Deanery() {
     }
 }
 
-Deanery::Deanery(std::vector<Group*>& groups) : Deanery() {
+Deanery::Deanery(const std::vector<Group*>& groups) : Deanery() {
     this->groups = std::move(groups);
 }
 
@@ -312,18 +312,18 @@ void Deanery::printPerformanceData() const {
     }
 }
 
-void Deanery::transferToGroup(const std::vector<Student*>& students, Group& group) const {
+void Deanery::transferToGroup(const std::vector<Student*>& students, Group* group) const {
     for (Student* student : students) {
-        if (!group.checkStudentPresence(*student)) {
-            student->enrollToGroup(&group);
-            group.addStudent(student);
+        if (!group->checkStudentPresence(*student)) {
+            student->enrollToGroup(group);
+            group->addStudent(student);
         }
     }
 }
 
 // Function to expel students, given in vector.
 // Returns the vector of successfully expelled students.
-std::vector<Student*>* Deanery::expelStudents(std::vector<Student*>& studentsToExpel) {
+std::vector<Student*>* Deanery::expelStudents(const std::vector<Student*>& studentsToExpel) {
     std::vector<Student*>* expelledStudents = new std::vector<Student*>;
 
     Group* studentGroup = nullptr;

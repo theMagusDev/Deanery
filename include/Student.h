@@ -1,7 +1,7 @@
 // Copyright (C) 2024 Yuriy Magus
 
-#ifndef INCLUDE_STUDENT_H
-#define INCLUDE_STUDENT_H
+#ifndef INCLUDE_STUDENT_H_
+#define INCLUDE_STUDENT_H_
 
 #include <string>
 #include <vector>
@@ -13,7 +13,10 @@ class Group;
 
 class Student {
  public:
-    Student(int id, std::string  name, std::string  surname, std::string  patronymic);
+    Student(int id,
+            std::string name,
+            std::string  surname,
+            std::string  patronymic);
     ~Student();
 
     int getId() const;
@@ -48,4 +51,4 @@ class Student {
 };
 
 
-#endif // INCLUDE_STUDENT_H
+#endif  // INCLUDE_STUDENT_H_
