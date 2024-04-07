@@ -20,13 +20,14 @@ class Student;
 
 class Group {
  public:
-    Group(std::string& title);
-    Group(std::string& title, Specialization spec);
+    Group(std::string title);
+    Group(std::string title, Specialization spec);
 
     const std::string& getTitle() const;
     void setTitle(const std::string& newTitle);
     std::string getSpec() const;
     void setSpec(Specialization newSpec);
+    Specialization getSpecEnum() const;
     std::vector<Student*> getStudents() const;
     std::string getHead(char separator = ' ') const;
     int getHeadID() const;
@@ -37,11 +38,12 @@ class Group {
     void addStudent(Student* student);
     void removeStudent(Student& student);
     void electHead();
+    void recoverHeadFromID();
     Student* searchStudent(int studentID) const;
     Student* searchStudent(
-        std::string& name,
-        std::string& surname,
-        std::string& patronymic
+        std::string name,
+        std::string surname,
+        std::string patronymic
     ) const;
     bool checkStudentPresence(Student& student);
     double getAverageMark() const;

@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
+#include <set>
 #include "Group.h"
 
 class Group;
@@ -23,6 +24,7 @@ class Student {
     void setSurname(const std::string &newSurname);
     const std::string& getPatronymic() const;
     void setPatronymic(const std::string &newPatronymic);
+    const std::string& getFullName() const;
     std::vector<int> getMarks() const;
     Group* getGroup() const;
 
@@ -40,7 +42,7 @@ class Student {
     Group* group;
     std::vector<int> marks;
 
-    static std::unordered_set<int> occupiedIDs;
+    static std::set<int> occupiedIDs;
 
     bool isStringCorrect(const std::string& str) const;
 };

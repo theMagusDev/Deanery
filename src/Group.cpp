@@ -2,20 +2,23 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <utility>
 #include "../include/Group.h"
 #include "../include/Exception.h"
 
 std::unordered_set<std::string*> Group::occupiedTitles;
 
-Group::Group(std::string& title) {
-    if (Group::occupiedTitles.find(&title) != Group::occupiedTitles.end()) {
+Group::Group(std::string title) {
+    srand(time(nullptr));
+
+    if (Group::occupiedTitles.find(&title) == Group::occupiedTitles.end()) {
         this->title = title;
     } else {
         throw DuplicatedGroupTitleException(std::string("Duplicated group title: got " + title));
     }
 }
 
-Group::Group(std::string &title, Specialization spec) : Group(title) {
+Group::Group(std::string title, Specialization spec) : Group(std::move(title)) {
     this->spec = spec;
 }
 
@@ -25,6 +28,10 @@ const std::string& Group::getTitle() const {
 
 void Group::setTitle(const std::string &newTitle) {
     this->title = newTitle;
+}
+
+Specialization Group::getSpecEnum() const {
+    return this->spec;
 }
 
 std::string Group::getSpec() const {
@@ -50,7 +57,7 @@ void Group::setSpec(Specialization newSpec) {
     if (newSpec != Specialization::UNINITIALIZED) {
         Group::spec = newSpec;
     } else {
-        throw NullSpecException(std::string("Setting spec to uninitialized state is prohibited!"));
+        throw NullSpecException("Setting spec to uninitialized state is prohibited!");
     }
 }
 
@@ -66,16 +73,26 @@ std::string Group::getHead(char separator) const {
     }
 }
 
+// Function to change student presence in Group instances.
+// Student's fields don't change in this function.
 void Group::addStudent(Student* student) {
+    bool studentPresentsInGroup = false;
     for (Student* studentPtr : students) {
         if (studentPtr == student) {
-            std::cerr << "Error: student already presents in this group." << std::endl;
+            studentPresentsInGroup = true;
         }
         if (student->getId() == headID) {
             this->head = student;
         }
     }
 
+    if (studentPresentsInGroup) {
+        return;
+    }
+
+    if (student->getGroup() != nullptr && student->getGroup() != this) {
+        student->getGroup()->removeStudent(*student);
+    }
     students.push_back(student);
 }
 
@@ -116,9 +133,9 @@ Student* Group::searchStudent(int studentID) const {
 }
 
 Student *Group::searchStudent (
-    std::string &name,
-    std::string &surname,
-    std::string &patronymic
+    std::string name,
+    std::string surname,
+    std::string patronymic
 ) const {
     bool nameMatches = false;
     bool surnameMatches = false;
@@ -126,7 +143,7 @@ Student *Group::searchStudent (
 
     for (Student* student : students) {
         nameMatches = student->getName() == name;
-        surnameMatches = student->getName() == surname;
+        surnameMatches = student->getSurname() == surname;
         patronymicMatches = student->getPatronymic() == patronymic;
         if (nameMatches && surnameMatches && patronymicMatches) {
             return student;
@@ -190,4 +207,8 @@ void Group::addToStudentsIDs(int id) {
 
 std::vector<int> Group::getStudentsIDs() const {
     return this->studentsIDs;
+}
+
+void Group::recoverHeadFromID() {
+    this->head = searchStudent(headID);
 }

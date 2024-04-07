@@ -42,15 +42,16 @@ std::vector<Student*> Deanery::createStudentsFromFile() {
 
     int maxStudentLineLength = 0;
     std::string stringMaxStudentLineLength;
-    char tempChar = '\0';
+    char tempChar = getc(stream);
     while (tempChar != '#') {
-        tempChar = getc(stream);
         stringMaxStudentLineLength.push_back(tempChar);
+        tempChar = getc(stream);
     }
     maxStudentLineLength = std::stoi(stringMaxStudentLineLength);
 
     char* buffer = new char[maxStudentLineLength];
     char* fgetsResult = fgets(buffer, maxStudentLineLength, stream);
+    fgetsResult = fgets(buffer, maxStudentLineLength, stream);
     std::string tempLine;
     std::stringstream stringStream;
 
@@ -83,7 +84,7 @@ std::vector<Student*> Deanery::createStudentsFromFile() {
         createdStudent = new Student(studentID, name, surname, patronymic);
 
         while (stringStream >> token) {
-            isMark10 = token.length() == 2 && token[0] == 1 && token[1] == 0;
+            isMark10 = token.length() == 2 && token[0] == '1' && token[1] == '0';
             isOtherMark = token.length() == 1 && token[0] >= '0' && token[0] <= '9';
             if (!(isMark10 || isOtherMark)) {
                 break;
@@ -96,6 +97,8 @@ std::vector<Student*> Deanery::createStudentsFromFile() {
             std::cerr << "Error: group not found for student " << name << " " << surname << " " << patronymic << "." << std::endl;
         } else {
             createdStudent->enrollToGroup(groupPtr);
+            groupPtr->addStudent(createdStudent);
+            groupPtr->recoverHeadFromID();
         }
 
         fgetsResult = fgets(buffer, maxStudentLineLength, stream);
@@ -154,15 +157,16 @@ void Deanery::createGroupsFromFile() {
 
     int maxGroupLineLength = 0;
     std::string stringMaxGroupLineLength;
-    char tempChar = '\0';
+    char tempChar = getc(stream);
     while (tempChar != '#') {
-        tempChar = getc(stream);
         stringMaxGroupLineLength.push_back(tempChar);
+        tempChar = getc(stream);
     }
     maxGroupLineLength = std::stoi(stringMaxGroupLineLength);
 
     char* buffer = new char[maxGroupLineLength];
     char* fgetsResult = fgets(buffer, maxGroupLineLength, stream);
+    fgetsResult = fgets(buffer, maxGroupLineLength, stream);
     std::string tempLine;
     std::stringstream stringStream;
 
@@ -189,24 +193,16 @@ void Deanery::createGroupsFromFile() {
             if (stringSpecialization == "COMPUTER_SCIENCE") {
                 specialization = Specialization::COMPUTER_SCIENCE;
             } else {
-                if (stringSpecialization == "MATH") {
-                    specialization = Specialization::MATH;
+                if (stringSpecialization == "LAW") {
+                    specialization = Specialization::LAW;
                 } else {
-                    if (stringSpecialization == "COMPUTER_SCIENCE") {
-                        specialization = Specialization::COMPUTER_SCIENCE;
+                    if (stringSpecialization == "ECONOMICS") {
+                        specialization = Specialization::ECONOMICS;
                     } else {
-                        if (stringSpecialization == "LAW") {
-                            specialization = Specialization::LAW;
+                        if (stringSpecialization == "HUMANITIES") {
+                            specialization = Specialization::HUMANITIES;
                         } else {
-                            if (stringSpecialization == "ECONOMICS") {
-                                specialization = Specialization::ECONOMICS;
-                            } else {
-                                if (stringSpecialization == "HUMANITIES") {
-                                    specialization = Specialization::HUMANITIES;
-                                } else {
-                                    specialization = Specialization::UNINITIALIZED;
-                                }
-                            }
+                            specialization = Specialization::UNINITIALIZED;
                         }
                     }
                 }
@@ -222,6 +218,8 @@ void Deanery::createGroupsFromFile() {
             }
             createdGroup->addToStudentsIDs(std::stoi(token));
         }
+
+        this->addGroup(createdGroup);
 
         fgetsResult = fgets(buffer, maxGroupLineLength, stream);
     }
@@ -243,10 +241,33 @@ void Deanery::saveGroupsFile() const {
 
     std::string groupLine;
     size_t fullGroupLineLength = 0;
+    std::string groupSpec;
     for (Group* group : groups) {
+        switch (group->getSpecEnum()) {
+            case Specialization::UNINITIALIZED:
+                groupSpec = "UNINITIALIZED";
+                break;
+            case Specialization::MATH:
+                groupSpec = "MATH";
+                break;
+            case Specialization::COMPUTER_SCIENCE:
+                groupSpec = "COMPUTER_SCIENCE";
+                break;
+            case Specialization::LAW:
+                groupSpec = "LAW";
+                break;
+            case Specialization::ECONOMICS:
+                groupSpec = "ECONOMICS";
+                break;
+            case Specialization::HUMANITIES:
+                groupSpec = "HUMANITIES";
+                break;
+            default:
+                groupSpec = "UNINITIALIZED";
+                break;
+        }
         groupLine = group->getTitle() + " "
-                + group->getSpec() + " "
-                + std::to_string(group->getAverageMark()) + " "
+                + groupSpec + " "
                 + std::to_string(group->getHeadID());
         for (Student* student : group->getStudents()) {
             groupLine.append(" " + std::to_string(student->getId()));
@@ -258,7 +279,6 @@ void Deanery::saveGroupsFile() const {
         }
         fputc('\n', stream);
         fputs(groupLine.c_str(), stream);
-
     }
 
     fseek(stream, 0, SEEK_SET);
@@ -292,24 +312,27 @@ void Deanery::printPerformanceData() const {
     }
 }
 
-void Deanery::transferToGroup(const std::vector<Student*>& students, Group &group) const {
+void Deanery::transferToGroup(const std::vector<Student*>& students, Group& group) const {
     for (Student* student : students) {
         if (!group.checkStudentPresence(*student)) {
+            student->enrollToGroup(&group);
             group.addStudent(student);
         }
     }
 }
 
-std::vector<Student*>* Deanery::expelStudents(std::vector<Student*>& students) {
+// Function to expel students, given in vector.
+// Returns the vector of successfully expelled students.
+std::vector<Student*>* Deanery::expelStudents(std::vector<Student*>& studentsToExpel) {
     std::vector<Student*>* expelledStudents = new std::vector<Student*>;
 
-    Group* studentGroup;
-    for (Student* student : students) {
-        studentGroup = student->getGroup();
+    Group* studentGroup = nullptr;
+    for (Student* studentIterator : studentsToExpel) {
+        studentGroup = studentIterator->getGroup();
         if (studentGroup != nullptr) {
-            studentGroup->removeStudent(*student);
+            studentGroup->removeStudent(*studentIterator);
         }
-        expelledStudents->push_back(student);
+        expelledStudents->push_back(studentIterator);
     }
 
     return expelledStudents;
@@ -360,4 +383,14 @@ void Deanery::loadDataFromFile() {
 void Deanery::saveDataToFile() {
     saveStudentsFile();
     saveGroupsFile();
+}
+
+void Deanery::addGroup(Group* group) {
+    for (Group* groupIterator : groups) {
+        if (groupIterator == group) {
+            return;
+        }
+    }
+
+    groups.push_back(group);
 }

@@ -4,7 +4,7 @@
 #include "../include/Student.h"
 #include "../include/Exception.h"
 
-std::unordered_set<int> Student::occupiedIDs;
+std::set<int> Student::occupiedIDs;
 
 Student::Student(
     int id,
@@ -12,37 +12,40 @@ Student::Student(
     std::string surname,
     std::string patronymic
 ) {
-    bool IDisOccupied = Student::occupiedIDs.find(id) == Student::occupiedIDs.end();
+    if (isStringCorrect(name)) {
+        this->name = std::move(name);
+    } else {
+        throw InvalidNameException("Invalid name! Only English letters and '-' are allowed; 0 < length <= 34. Got " + name);
+    }
+    if (isStringCorrect(surname)) {
+        this->surname = std::move(surname);
+    } else {
+        throw InvalidSurnameException("Invalid surname! Only English letters and '-' are allowed; 0 < length <= 34. Got " + surname);
+    }
+    if (isStringCorrect(patronymic)) {
+        this->patronymic = std::move(patronymic);
+    } else {
+        throw InvalidPatronymicException("Invalid patronymic! Only English letters and '-' are allowed; 0 < length <= 34. Got " + patronymic) ;
+    }
+
+    bool IDisOccupied = Student::occupiedIDs.find(id) != Student::occupiedIDs.end();
     if (!IDisOccupied && id >= 0) {
         this->id = id;
+        Student::occupiedIDs.insert(id);
     } else {
-        if (IDisOccupied) {
-            std::cerr << "Error: duplicated student ID, generating automatically." << std::endl;
-        } else {
-            std::cerr << "Error: student ID mustn't be negative, generating automatically." << std::endl;
-        }
         srand(time(nullptr));
         int generatedID = rand() % (occupiedIDs.size() * 2) + 1;
         while (occupiedIDs.find(generatedID) != occupiedIDs.end()) {
             generatedID = rand() % (occupiedIDs.size() * 2) + 1;
         }
         this->id = generatedID;
-    }
+        Student::occupiedIDs.insert(generatedID);
 
-    if (isStringCorrect(name)) {
-        this->name = std::move(name);
-    } else {
-        throw InvalidNameException(std::string("Invalid name! Only English letters and '-' are allowed; 0 < length <= 34. Got " + name));
-    }
-    if (isStringCorrect(surname)) {
-        this->surname = std::move(surname);
-    } else {
-        throw InvalidSurnameException(std::string("Invalid surname! Only English letters and '-' are allowed; 0 < length <= 34. Got " + surname));
-    }
-    if (isStringCorrect(patronymic)) {
-        this->patronymic = std::move(patronymic);
-    } else {
-        throw InvalidPatronymicException(std::string("Invalid patronymic! Only English letters and '-' are allowed; 0 < length <= 34. Got " + patronymic)) ;
+        if (IDisOccupied) {
+            std::cerr << "Error in student " << getFullName() << ": duplicated student ID, generating automatically: " << generatedID << std::endl;
+        } else {
+            std::cerr << "Error in student " << getFullName() << ": student ID mustn't be negative, generating automatically: " << generatedID << std::endl;
+        }
     }
 
     this->group = nullptr;
@@ -62,31 +65,57 @@ int Student::getId() const {
 }
 
 void Student::setId(int newId) {
-    Student::id = newId;
+    bool IDisOccupied = Student::occupiedIDs.find(newId) != Student::occupiedIDs.end();
+    if (!IDisOccupied && newId >= 0) {
+        this->id = newId;
+        Student::occupiedIDs.insert(newId);
+    } else {
+        if (IDisOccupied) {
+            std::cerr << "Error in student " << getFullName() << ": duplicated student ID" << std::endl;
+        } else {
+            std::cerr << "Error in student " << getFullName() << ": student ID mustn't be negative" << std::endl;
+        }
+    }
 }
 
 const std::string &Student::getName() const {
     return name;
 }
 
-void Student::setName(const std::string &newName) {
-    Student::name = newName;
+void Student::setName(const std::string& newName) {
+    if (isStringCorrect(newName)) {
+        this->name = newName;
+    } else {
+        throw InvalidNameException("Invalid name! Only English letters and '-' are allowed; 0 < length <= 34. Got " + newName);
+    }
 }
 
 const std::string &Student::getSurname() const {
     return surname;
 }
 
-void Student::setSurname(const std::string &newSurname) {
-    Student::surname = newSurname;
+void Student::setSurname(const std::string& newSurname) {
+    if (isStringCorrect(newSurname)) {
+        this->surname = newSurname;
+    } else {
+        throw InvalidSurnameException("Invalid surname! Only English letters and '-' are allowed; 0 < length <= 34. Got " + newSurname);
+    }
 }
 
 const std::string &Student::getPatronymic() const {
     return patronymic;
 }
 
-void Student::setPatronymic(const std::string &newPatronymic) {
-    Student::patronymic = newPatronymic;
+void Student::setPatronymic(const std::string& newPatronymic) {
+    if (isStringCorrect(newPatronymic)) {
+        this->patronymic = newPatronymic;
+    } else {
+        throw InvalidPatronymicException("Invalid patronymic! Only English letters and '-' are allowed; 0 < length <= 34. Got " + newPatronymic);
+    }
+}
+
+const std::string& Student::getFullName() const {
+    return *(new std::string(name + " " + surname + " " + patronymic));
 }
 
 std::vector<int> Student::getMarks() const {
@@ -98,11 +127,13 @@ Group* Student::getGroup() const {
 }
 
 void Student::enrollToGroup(Group* newGroup) {
-    this->group = newGroup;
+    if (this->group != nullptr) {
+        this->group->removeStudent(*this);
+    }
     if (newGroup == nullptr) {
-        throw InvalidStudentGroupException(std::string("Invalid group: nullptr passed!"));
+        throw InvalidStudentGroupException("Invalid group: nullptr passed!");
     } else {
-        newGroup->addStudent(this);
+        this->group = newGroup;
     }
 }
 
@@ -112,11 +143,16 @@ void Student::putMark(int newMark) {
     if (isValidMark) {
         marks.push_back(newMark);
     } else {
-        throw InvalidMarkException(std::string("Invalid mark: expected 0 <= mark <= 10, " + std::to_string(newMark) + "got."));
+        throw InvalidMarkException("Invalid mark: expected 0 <= mark <= 10, " + std::to_string(newMark) + "got.");
     }
 }
 
 double Student::getAverageMark() const {
+    if (marks.empty()) {
+        std::cerr << "Error in student " << getFullName() << ": student do not have any marks, can not calculate average" << std::endl;
+        return -1.0;
+    }
+
     double result = 0.0;
     for (int mark : marks) {
         result += static_cast<double>(mark);
@@ -128,8 +164,17 @@ double Student::getAverageMark() const {
 
 void Student::printStudentPerformance(const std::string& prefix) const {
     std::cout << prefix << "Student "
-    << getName() << " " << getSurname() << " " << getPatronymic()
-    << ": average mark is " << getAverageMark() << std::endl;
+    << getName() << " " << getSurname() << " " << getPatronymic() << ": ";
+    if (this->marks.empty()) {
+        std::cout << "no marks" << std::endl;
+    } else {
+        std::cout << "average mark is " << getAverageMark() << ", marks:";
+        for (int mark : marks) {
+            std::cout << " " << mark;
+        }
+        std::cout << std::endl;
+    }
+
 }
 
 bool Student::isStringCorrect(const std::string& str) const {
@@ -138,12 +183,12 @@ bool Student::isStringCorrect(const std::string& str) const {
     }
     bool isUpperCaseLetter = false;
     bool isLowerCaseLetter = false;
-    bool isDash = false;
+    bool isHyphen = false;
     for (char strChar : str) {
-        isUpperCaseLetter = strChar > 'A' && strChar < 'Z';
-        isLowerCaseLetter = strChar > 'a' && strChar < 'z';
-        isDash = (strChar == '-');
-        if (!(isUpperCaseLetter || isLowerCaseLetter || isDash)) {
+        isUpperCaseLetter = strChar >= 'A' && strChar <= 'Z';
+        isLowerCaseLetter = strChar >= 'a' && strChar <= 'z';
+        isHyphen = (strChar == '-');
+        if (!(isUpperCaseLetter || isLowerCaseLetter || isHyphen)) {
             return false;
         }
     }

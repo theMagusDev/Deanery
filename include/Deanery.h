@@ -14,11 +14,12 @@ class Deanery {
     Deanery();
     explicit Deanery(std::vector<Group*>& groups);
 
+    void addGroup(Group* group);
     void placeMarksToAllAtRandom(Group* group) const;
     void printPerformanceData() const;
     void transferToGroup(const std::vector<Student*>& students, Group& group) const;
     Group* findGroup(const std::string& name) const;
-    std::vector<Student*>* expelStudents(std::vector<Student*>& students);
+    std::vector<Student*>* expelStudents(std::vector<Student*>& studentsToExpel);
     void loadDataFromFile();
     void saveDataToFile();
 
