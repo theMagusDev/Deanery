@@ -1,11 +1,11 @@
 // Copyright (C) 2024 Yuriy Magus
 
+#include <direct.h>
+#include <sys/stat.h>
+#include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
-#include <cstdio>
-#include <direct.h>
-#include <sys/stat.h>
 #include <string>
 #include <sstream>
 #include "../include/Deanery.h"
@@ -19,24 +19,24 @@ Deanery::Deanery() {
     srand(time(nullptr));
 
     // check and create bd folder
-    const char* dir = "../bd"; // directory
-    struct stat myStat; // stat for check
+    const char* dir = "../bd";  // directory
+    struct stat myStat;  // stat for check
     if (stat(dir, &myStat) != 0) {
         int returnCode = mkdir(dir);
         if (returnCode == -1) {
-            throw FolderCreationException(std::string("Error creating bd folder."));
+            throw FolderCreationException("Error creating bd folder.");
         }
     }
 }
 
 Deanery::Deanery(const std::vector<Group*>& groups) : Deanery() {
-    this->groups = std::move(groups);
+    this->groups = groups;
 }
 
 std::vector<Student*> Deanery::createStudentsFromFile() {
     FILE* stream = fopen("../bd/students_data.txt", "r");
     if (stream == nullptr) {
-        throw FileOpeningException(std::string("Error opening students_data file."));
+        throw FileOpeningException("Error opening students_data file.");
     }
     fseek(stream, 0, SEEK_SET);
 
@@ -84,8 +84,12 @@ std::vector<Student*> Deanery::createStudentsFromFile() {
         createdStudent = new Student(studentID, name, surname, patronymic);
 
         while (stringStream >> token) {
-            isMark10 = token.length() == 2 && token[0] == '1' && token[1] == '0';
-            isOtherMark = token.length() == 1 && token[0] >= '0' && token[0] <= '9';
+            isMark10 = token.length() == 2
+                    && token[0] == '1'
+                    && token[1] == '0';
+            isOtherMark = token.length() == 1
+                    && token[0] >= '0'
+                    && token[0] <= '9';
             if (!(isMark10 || isOtherMark)) {
                 break;
             }
@@ -94,7 +98,8 @@ std::vector<Student*> Deanery::createStudentsFromFile() {
 
         if (groupPtr == nullptr) {
             nonAssociatedStudents.push_back(createdStudent);
-            std::cerr << "Error: group not found for student " << name << " " << surname << " " << patronymic << "." << std::endl;
+            std::cerr << "Error: group not found for student "
+                << createdStudent->getFullName() << "." << std::endl;
         } else {
             createdStudent->enrollToGroup(groupPtr);
             groupPtr->addStudent(createdStudent);
@@ -114,7 +119,7 @@ void Deanery::saveStudentsFile() const {
     // check and crate students file
     FILE* stream = fopen("../bd/students_data.txt", "w");
     if (stream == nullptr) {
-        throw FileOpeningException(std::string("Error opening students_data file."));
+        throw FileOpeningException("Error opening students_data file.");
     }
 
     fseek(stream, 0, SEEK_SET);
@@ -151,7 +156,7 @@ void Deanery::saveStudentsFile() const {
 void Deanery::createGroupsFromFile() {
     FILE* stream = fopen("../bd/groups_data.txt", "r");
     if (stream == nullptr) {
-        throw FileOpeningException(std::string("Error opening groups_data file."));
+        throw FileOpeningException("Error opening groups_data file.");
     }
     fseek(stream, 0, SEEK_SET);
 
@@ -176,7 +181,6 @@ void Deanery::createGroupsFromFile() {
     Specialization specialization = Specialization::UNINITIALIZED;
     std::vector<int> studentsIDs;
     std::string headID;
-    
     std::string token;
 
     while (fgetsResult != nullptr) {
@@ -232,7 +236,7 @@ void Deanery::saveGroupsFile() const {
     // check and crate students file
     FILE* stream = fopen("../bd/groups_data.txt", "w");
     if (stream == nullptr) {
-        throw FileOpeningException(std::string("Error opening groups_data file."));
+        throw FileOpeningException("Error opening groups_data file.");
     }
 
     fseek(stream, 0, SEEK_SET);
@@ -292,7 +296,7 @@ void Deanery::placeMarksToAllAtRandom(Group* group) const {
     }
 
     for (Student* student : group->getStudents()) {
-        student->putMark((rand() % 5) + 6); // range: 6-10
+        student->putMark((rand() % 5) + 6);  // range: 6-10
     }
 }
 
@@ -330,7 +334,7 @@ std::vector<Student*>* Deanery::expelStudents(const std::vector<Student*>& stude
     for (Student* studentIterator : studentsToExpel) {
         studentGroup = studentIterator->getGroup();
         if (studentGroup != nullptr) {
-            studentGroup->removeStudent(*studentIterator);
+            studentGroup->removeStudent(studentIterator);
         }
         expelledStudents->push_back(studentIterator);
     }
@@ -355,7 +359,7 @@ Group* Deanery::findGroup(const std::string& name) const {
 void Deanery::clearStudents() {
     for (Group* group : groups) {
         for (Student* student : group->getStudents()) {
-            group->removeStudent(*student);
+            group->removeStudent(student);
             delete student;
         }
     }

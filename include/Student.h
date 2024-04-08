@@ -47,7 +47,7 @@ class Student {
 
     static std::set<int> occupiedIDs;
 
-    bool isStringCorrect(const std::string& str) const;
+    static bool isStringCorrect(const std::string& str) ;
 };
 
 

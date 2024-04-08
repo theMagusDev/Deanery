@@ -12,17 +12,17 @@ Student::Student(
     std::string surname,
     std::string patronymic
 ) {
-    if (isStringCorrect(name)) {
+    if (Student::isStringCorrect(name)) {
         this->name = std::move(name);
     } else {
         throw InvalidNameException("Invalid name! Only English letters and '-' are allowed; 0 < length <= 34. Got " + name);
     }
-    if (isStringCorrect(surname)) {
+    if (Student::isStringCorrect(surname)) {
         this->surname = std::move(surname);
     } else {
         throw InvalidSurnameException("Invalid surname! Only English letters and '-' are allowed; 0 < length <= 34. Got " + surname);
     }
-    if (isStringCorrect(patronymic)) {
+    if (Student::isStringCorrect(patronymic)) {
         this->patronymic = std::move(patronymic);
     } else {
         throw InvalidPatronymicException("Invalid patronymic! Only English letters and '-' are allowed; 0 < length <= 34. Got " + patronymic) ;
@@ -83,7 +83,7 @@ const std::string &Student::getName() const {
 }
 
 void Student::setName(const std::string& newName) {
-    if (isStringCorrect(newName)) {
+    if (Student::isStringCorrect(newName)) {
         this->name = newName;
     } else {
         throw InvalidNameException("Invalid name! Only English letters and '-' are allowed; 0 < length <= 34. Got " + newName);
@@ -95,7 +95,7 @@ const std::string &Student::getSurname() const {
 }
 
 void Student::setSurname(const std::string& newSurname) {
-    if (isStringCorrect(newSurname)) {
+    if (Student::isStringCorrect(newSurname)) {
         this->surname = newSurname;
     } else {
         throw InvalidSurnameException("Invalid surname! Only English letters and '-' are allowed; 0 < length <= 34. Got " + newSurname);
@@ -107,7 +107,7 @@ const std::string &Student::getPatronymic() const {
 }
 
 void Student::setPatronymic(const std::string& newPatronymic) {
-    if (isStringCorrect(newPatronymic)) {
+    if (Student::isStringCorrect(newPatronymic)) {
         this->patronymic = newPatronymic;
     } else {
         throw InvalidPatronymicException("Invalid patronymic! Only English letters and '-' are allowed; 0 < length <= 34. Got " + newPatronymic);
@@ -128,7 +128,7 @@ Group* Student::getGroup() const {
 
 void Student::enrollToGroup(Group* newGroup) {
     if (this->group != nullptr) {
-        this->group->removeStudent(*this);
+        this->group->removeStudent(this);
     }
     if (newGroup == nullptr) {
         throw InvalidStudentGroupException("Invalid group: nullptr passed!");
@@ -177,7 +177,7 @@ void Student::printStudentPerformance(const std::string& prefix) const {
 
 }
 
-bool Student::isStringCorrect(const std::string& str) const {
+bool Student::isStringCorrect(const std::string& str) {
     if (str.length() > 34 || str.empty()) {
         return false;
     }

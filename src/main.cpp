@@ -14,7 +14,7 @@ void deaneryLoadMethod();
 
 int main() {
 //    studentConstructorsDemo();
-//    studentMethodsDemo();
+    studentMethodsDemo();
 //    groupMethodsDemo();
 //    deaneryMethodsDemo();
 //    deaneryLoadMethod();
@@ -105,6 +105,13 @@ void studentMethodsDemo() {
     cst1->addStudent(artem);
     artem->enrollToGroup(cst1);
     cout << artem->getGroup()->getTitle() << endl; // 23CST1
+
+    try {
+        artem->enrollToGroup(nullptr);
+    } catch (InvalidStudentGroupException& exception) {
+        std::cerr << "Invalid group exception, message: " << exception.getMessage() << std::endl;
+        // Invalid group exception, message: Invalid group: nullptr passed!
+    }
 }
 
 void groupMethodsDemo() {
