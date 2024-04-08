@@ -191,9 +191,15 @@ int Group::getHeadID() const {
 
 void Group::setHeadID(int id) {
     if (id >= 0) {
-        this->headID = id;
+        if (searchStudent(id) == nullptr) {
+            std::cerr << "Error setting group " << getTitle()
+                << " headID: student with ID " << id << "is not in this group."
+                << std::endl;
+        } else {
+            this->headID = id;
+        }
     } else {
-        throw InvalidIDException(std::string("Invalid head's id: it must not be negative."));
+        throw InvalidIDException("Invalid head's id: it must not be negative.");
     }
 }
 
