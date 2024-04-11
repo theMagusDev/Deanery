@@ -46,8 +46,7 @@ class Student {
     std::vector<int> marks;
 
     static std::set<int> occupiedIDs;
-
-    static bool isStringCorrect(const std::string& str) ;
+    static bool isStringCorrect(const std::string& str);
 };
 
 

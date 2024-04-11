@@ -14,7 +14,8 @@ Group::Group(std::string title) {
     if (Group::occupiedTitles.find(&title) == Group::occupiedTitles.end()) {
         this->title = title;
     } else {
-        throw DuplicatedGroupTitleException(std::string("Duplicated group title: got " + title));
+        throw DuplicatedGroupTitleException(
+                "Duplicated group title: got " + title);
     }
 }
 
@@ -57,7 +58,8 @@ void Group::setSpec(Specialization newSpec) {
     if (newSpec != Specialization::UNINITIALIZED) {
         Group::spec = newSpec;
     } else {
-        throw NullSpecException("Setting spec to uninitialized state is prohibited!");
+        throw NullSpecException(
+                "Setting spec to uninitialized state is prohibited!");
     }
 }
 
@@ -69,7 +71,9 @@ std::string Group::getHead(char separator) const {
     if (this->head == nullptr) {
         return "No head";
     } else {
-        return head->getName() + separator + head->getSurname() + separator + head->getPatronymic();
+        return head->getName() + separator +
+        head->getSurname() + separator +
+        head->getPatronymic();
     }
 }
 
@@ -108,12 +112,14 @@ void Group::removeStudent(Student* student) {
         }
     }
 
-    std::cerr << "Error: no student " << student->getFullName() << " found." << std::endl;
+    std::cerr << "Error: no student "
+        << student->getFullName() << " found." << std::endl;
 }
 
 void Group::electHead() {
     if (students.empty()) {
-        std::cerr << "Error electing head: group " << title << " is empty." << std::endl;
+        std::cerr << "Error electing head: group "
+            << title << " is empty." << std::endl;
         this->head = nullptr;
         return;
     }
@@ -132,7 +138,7 @@ Student* Group::searchStudent(int studentID) const {
     return nullptr;
 }
 
-Student *Group::searchStudent (
+Student* Group::searchStudent(
     std::string name,
     std::string surname,
     std::string patronymic
@@ -201,7 +207,8 @@ void Group::addToStudentsIDs(int id) {
     if (id >= 0) {
         studentsIDs.push_back(id);
     } else {
-        throw InvalidIDException(std::string("Invalid head's id: it must not be negative."));
+        throw InvalidIDException(
+                "Invalid head's id: it must not be negative.");
     }
 }
 

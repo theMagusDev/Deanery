@@ -303,7 +303,8 @@ void Deanery::placeMarksToAllAtRandom(Group* group) const {
 // One function to print in console and give performance statistics
 void Deanery::printPerformanceData() const {
     if (groups.empty()) {
-        std::cout << "No groups with students found, can not print anything." << std::endl;
+        std::cout << "No groups with students found, "
+                     "can not print anything." << std::endl;
         return;
     }
 
@@ -316,7 +317,10 @@ void Deanery::printPerformanceData() const {
     }
 }
 
-void Deanery::transferToGroup(const std::vector<Student*>& students, Group* group) const {
+void Deanery::transferToGroup(
+    const std::vector<Student*>& students,
+    Group* group
+) const {
     for (Student* student : students) {
         if (!group->checkStudentPresence(*student)) {
             student->enrollToGroup(group);
@@ -327,7 +331,9 @@ void Deanery::transferToGroup(const std::vector<Student*>& students, Group* grou
 
 // Function to expel students, given in vector.
 // Returns the vector of successfully expelled students.
-std::vector<Student*>* Deanery::expelStudents(const std::vector<Student*>& studentsToExpel) {
+std::vector<Student*>* Deanery::expelStudents(
+    const std::vector<Student*>& studentsToExpel
+) {
     std::vector<Student*>* expelledStudents = new std::vector<Student*>;
 
     Group* studentGroup = nullptr;
