@@ -9,7 +9,7 @@
 class CustomException : std::exception {
  public:
     explicit CustomException(std::string message);
-    std::string getMessage() const;
+    const char* what() const noexcept override;
 
  private:
     std::string message;

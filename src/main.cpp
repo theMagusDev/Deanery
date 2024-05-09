@@ -13,8 +13,8 @@ void deaneryMethodsDemo();
 void deaneryLoadMethod();
 
 int main() {
-//    studentConstructorsDemo();
-    studentMethodsDemo();
+    studentConstructorsDemo();
+//    studentMethodsDemo();
 //    groupMethodsDemo();
 //    deaneryMethodsDemo();
 //    deaneryLoadMethod();
@@ -40,20 +40,20 @@ void studentConstructorsDemo() {
     try {
         Student *wrongStudent = new Student(4, "Elena228", "Petrova", "Vladimirovna");
     } catch (InvalidNameException& exception) {
-        cout << "Invalid name, message: " << exception.getMessage() << endl;
+        cout << "Invalid name, message: " << exception.what() << endl;
         // Invalid name, message: Invalid name! Only English letters and '-' are allowed; 0 < length <= 34. Got Elena228
     }
     // incorrect surname, patronymic:
     try {
         Student *wrongStudent = new Student(4, "Elena", "Petr0va", "Vladimirovna");
     } catch (InvalidSurnameException& exception) {
-        cout << "Invalid surname, message: " << exception.getMessage() << endl;
+        cout << "Invalid surname, message: " << exception.what() << endl;
         // IInvalid surname, message: Invalid surname! Only English letters and '-' are allowed; 0 < length <= 34. Got Petr0va
     }
     try {
         Student *wrongStudent = new Student(4, "Elena", "Petrova", "Vlad1m1r0vna");
     } catch (InvalidPatronymicException& exception) {
-        cout << "Invalid patronymic, message: " << exception.getMessage() << endl;
+        cout << "Invalid patronymic, message: " << exception.what() << endl;
         // Invalid patronymic, message: Invalid patronymic! Only English letters and '-' are allowed; 0 < length <= 34. Got Vlad1m1r0vna
     }
     // but hyphen is allowed
@@ -69,19 +69,19 @@ void studentMethodsDemo() {
     try {
         artem->setName("Artem228PRO!");
     } catch (InvalidNameException& exception) {
-        cout << "Invalid name, message: " << exception.getMessage() << endl;
+        cout << "Invalid name, message: " << exception.what() << endl;
         // Invalid name, message: Invalid name! Only English letters and '-' are allowed; 0 < length <= 34. Got Artem228PRO!
     }
     try {
         artem->setSurname("IvanovSuper111");
     } catch (InvalidSurnameException& exception) {
-        cout << "Invalid surname, message: " << exception.getMessage() << endl;
+        cout << "Invalid surname, message: " << exception.what() << endl;
         // Invalid surname, message: Invalid surname! Only English letters and '-' are allowed; 0 < length <= 34. Got IvanovSuper111
     }
     try {
         artem->setPatronymic("Serg33vi4");
     } catch (InvalidPatronymicException& exception) {
-        cout << "Invalid patronymic, message: " << exception.getMessage() << endl;
+        cout << "Invalid patronymic, message: " << exception.what() << endl;
         // Invalid patronymic, message: Invalid patronymic! Only English letters and '-' are allowed; 0 < length <= 34. Got Serg33vi4
     }
 
@@ -109,7 +109,7 @@ void studentMethodsDemo() {
     try {
         artem->enrollToGroup(nullptr);
     } catch (InvalidStudentGroupException& exception) {
-        std::cerr << "Invalid group exception, message: " << exception.getMessage() << std::endl;
+        std::cerr << "Invalid group exception, message: " << exception.what() << std::endl;
         // Invalid group exception, message: Invalid group: nullptr passed!
     }
 }
@@ -164,7 +164,7 @@ void groupMethodsDemo() {
     try {
         cst1->setSpec(Specialization::UNINITIALIZED);
     } catch (NullSpecException& exception) {
-        cout << "Exception setting spec, message: " << exception.getMessage() << endl;
+        cout << "Exception setting spec, message: " << exception.what() << endl;
         // Exception setting spec, message: Setting spec to uninitialized state is prohibited!
     }
     cst1->setSpec(Specialization::MATH);

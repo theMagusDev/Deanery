@@ -9,6 +9,6 @@ CustomException::CustomException(std::string message) {
     this->message = std::move(message);
 }
 
-std::string CustomException::getMessage() const {
-    return this->message;
+const char* CustomException::what() const noexcept {
+    return this->message.c_str();
 }
