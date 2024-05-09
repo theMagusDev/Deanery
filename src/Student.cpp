@@ -66,6 +66,7 @@ Student::Student(
 }
 
 Student::~Student() {
+    Student::occupiedIDs.erase(this->id);
     this->id = -1;
     this->name.clear();
     this->surname.clear();

@@ -14,6 +14,7 @@ class Deanery {
  public:
     Deanery();
     explicit Deanery(const std::vector<Group*>& groups);
+    ~Deanery();
 
     void addGroup(Group* group);
     void placeMarksToAllAtRandom(Group* group) const;

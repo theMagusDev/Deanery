@@ -23,6 +23,7 @@ class Group {
  public:
     explicit Group(std::string title);
     Group(std::string title, Specialization spec);
+    ~Group();
 
     const std::string& getTitle() const;
     void setTitle(const std::string& newTitle);

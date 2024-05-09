@@ -23,6 +23,16 @@ Group::Group(std::string title, Specialization spec) : Group(std::move(title)) {
     this->spec = spec;
 }
 
+Group::~Group() {
+    Group::occupiedTitles.erase(&(this->title));
+    this->title = "Deleted";
+    this->spec = Specialization::UNINITIALIZED;
+    this->head = nullptr;
+    this->headID = -1;
+    this->students.clear();
+    this->studentsIDs.clear();
+}
+
 const std::string& Group::getTitle() const {
     return this->title;
 }

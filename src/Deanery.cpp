@@ -33,6 +33,10 @@ Deanery::Deanery(const std::vector<Group*>& groups) : Deanery() {
     this->groups = groups;
 }
 
+Deanery::~Deanery() {
+    this->groups.clear();
+}
+
 std::vector<Student*> Deanery::createStudentsFromFile() {
     FILE* stream = fopen("../bd/students_data.txt", "r");
     if (stream == nullptr) {
