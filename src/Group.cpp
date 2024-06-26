@@ -15,7 +15,7 @@ Group::Group(std::string title) {
         this->title = title;
     } else {
         throw DuplicatedGroupTitleException(
-                "Duplicated group title: got " + title);
+                ("Duplicated group title: got " + title).c_str());
     }
 }
 

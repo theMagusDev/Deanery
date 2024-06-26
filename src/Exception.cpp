@@ -5,10 +5,10 @@
 
 #include "../include/Exception.h"
 
-CustomException::CustomException(std::string message) {
-    this->message = std::move(message);
+CustomException::CustomException(const char* message) {
+    this->message = message;
 }
 
 const char* CustomException::what() const noexcept {
-    return this->message.c_str();
+    return this->message;
 }

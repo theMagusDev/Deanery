@@ -17,23 +17,23 @@ Student::Student(
     if (Student::isStringCorrect(name)) {
         this->name = std::move(name);
     } else {
-        throw InvalidNameException(
+        throw InvalidNameException((
            "Invalid name! Only English letters and '-' are allowed; "
-           "0 < length <= 34. Got " + name);
+           "0 < length <= 34. Got " + name).c_str());
     }
     if (Student::isStringCorrect(surname)) {
         this->surname = std::move(surname);
     } else {
-        throw InvalidSurnameException(
+        throw InvalidSurnameException((
             "Invalid surname! Only English letters and '-' are allowed; "
-            "0 < length <= 34. Got " + surname);
+            "0 < length <= 34. Got " + surname).c_str());
     }
     if (Student::isStringCorrect(patronymic)) {
         this->patronymic = std::move(patronymic);
     } else {
-        throw InvalidPatronymicException(
+        throw InvalidPatronymicException((
             "Invalid patronymic! Only English letters and '-' are allowed; "
-            "0 < length <= 34. Got " + patronymic);
+            "0 < length <= 34. Got " + patronymic).c_str());
     }
 
     bool IDisOccupied =
@@ -104,9 +104,9 @@ void Student::setName(const std::string& newName) {
     if (Student::isStringCorrect(newName)) {
         this->name = newName;
     } else {
-        throw InvalidNameException(
+        throw InvalidNameException((
             "Invalid name! Only English letters and '-' are allowed; "
-            "0 < length <= 34. Got " + newName);
+            "0 < length <= 34. Got " + newName).c_str());
     }
 }
 
@@ -118,9 +118,9 @@ void Student::setSurname(const std::string& newSurname) {
     if (Student::isStringCorrect(newSurname)) {
         this->surname = newSurname;
     } else {
-        throw InvalidSurnameException(
+        throw InvalidSurnameException((
             "Invalid surname! Only English letters and '-' are allowed; "
-            "0 < length <= 34. Got " + newSurname);
+            "0 < length <= 34. Got " + newSurname).c_str());
     }
 }
 
@@ -132,9 +132,9 @@ void Student::setPatronymic(const std::string& newPatronymic) {
     if (Student::isStringCorrect(newPatronymic)) {
         this->patronymic = newPatronymic;
     } else {
-        throw InvalidPatronymicException(
+        throw InvalidPatronymicException((
             "Invalid patronymic! Only English letters and '-' are allowed; "
-            "0 < length <= 34. Got " + newPatronymic);
+            "0 < length <= 34. Got " + newPatronymic).c_str());
     }
 }
 
@@ -167,9 +167,9 @@ void Student::putMark(int newMark) {
     if (isValidMark) {
         marks.push_back(newMark);
     } else {
-        throw InvalidMarkException(
+        throw InvalidMarkException((
             "Invalid mark: expected 0 <= mark <= 10, "
-            + std::to_string(newMark) + "got.");
+            + std::to_string(newMark) + "got.").c_str());
     }
 }
 

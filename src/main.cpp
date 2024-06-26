@@ -13,11 +13,11 @@ void deaneryMethodsDemo();
 void deaneryLoadMethod();
 
 int main() {
-    studentConstructorsDemo();
+//    studentConstructorsDemo();
 //    studentMethodsDemo();
 //    groupMethodsDemo();
 //    deaneryMethodsDemo();
-//    deaneryLoadMethod();
+    deaneryLoadMethod();
 
     return 0;
 }
