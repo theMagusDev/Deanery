@@ -12,7 +12,7 @@ class CustomException : std::exception {
     const char* what() const noexcept override;
 
  private:
-    const char* message;
+    std::string message;
 };
 
 class StudentException : public CustomException {
