@@ -376,7 +376,7 @@ void Deanery::clearStudents() {
 }
 
 /**
- * 1) frees allocated for removed students memory;
+ * 1) frees allocated for removed groups memory;
  * 2) erases groups vector.
  */
 void Deanery::clearGroups() {
