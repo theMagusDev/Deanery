@@ -13,9 +13,9 @@ void deaneryMethodsDemo();
 void deaneryLoadMethod();
 
 int main() {
-    studentConstructorsDemo();
+//    studentConstructorsDemo();
 //    studentMethodsDemo();
-//    groupMethodsDemo();
+    groupMethodsDemo();
 //    deaneryMethodsDemo();
 //    deaneryLoadMethod();
 
@@ -135,6 +135,7 @@ void groupMethodsDemo() {
     dmitri->putMark(5);
 
     Group* cst1 = new Group("23CST1", Specialization::COMPUTER_SCIENCE);
+    Group* cst1fake = new Group("23CST1", Specialization::COMPUTER_SCIENCE);
     cst1->addStudent(vladislav); // OK
     cst1->addStudent(vladislav);
     // Error in group 23CST1: student Vladislav Petrov Vasilievich already presents in this group.

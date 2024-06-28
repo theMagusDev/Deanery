@@ -59,7 +59,7 @@ class Group {
     std::vector<int> studentsIDs;
     // headID and studentsIDs are used only for Deanery's createGroupsFromFile()
 
-    static std::unordered_set<std::string*> occupiedTitles;
+    static std::unordered_set<std::string> occupiedTitles;
 };
 
 

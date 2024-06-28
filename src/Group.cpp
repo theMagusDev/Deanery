@@ -6,13 +6,14 @@
 #include "../include/Group.h"
 #include "../include/Exception.h"
 
-std::unordered_set<std::string*> Group::occupiedTitles;
+std::unordered_set<std::string> Group::occupiedTitles;
 
 Group::Group(std::string title) {
     srand(time(nullptr));
 
-    if (Group::occupiedTitles.find(&title) == Group::occupiedTitles.end()) {
+    if (Group::occupiedTitles.find(title) == Group::occupiedTitles.end()) {
         this->title = title;
+        Group::occupiedTitles.insert(title);
     } else {
         throw DuplicatedGroupTitleException(
                 ("Duplicated group title: got " + title).c_str());
@@ -24,7 +25,7 @@ Group::Group(std::string title, Specialization spec) : Group(std::move(title)) {
 }
 
 Group::~Group() {
-    Group::occupiedTitles.erase(&(this->title));
+    Group::occupiedTitles.erase(this->title);
     this->title = "Deleted";
     this->spec = Specialization::UNINITIALIZED;
     this->head = nullptr;
