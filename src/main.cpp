@@ -15,7 +15,7 @@ void deaneryLoadMethod();
 int main() {
 //    studentConstructorsDemo();
 //    studentMethodsDemo();
-    groupMethodsDemo();
+//    groupMethodsDemo();
 //    deaneryMethodsDemo();
 //    deaneryLoadMethod();
 
