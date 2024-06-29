@@ -151,9 +151,9 @@ Student* Group::searchStudent(int studentID) const {
 }
 
 Student* Group::searchStudent(
-    std::string name,
-    std::string surname,
-    std::string patronymic
+    const std::string& name,
+    const std::string& surname,
+    const std::string& patronymic
 ) const {
     bool nameMatches = false;
     bool surnameMatches = false;

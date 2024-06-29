@@ -43,9 +43,9 @@ class Group {
     void recoverHeadFromID();
     Student* searchStudent(int studentID) const;
     Student* searchStudent(
-        std::string name,
-        std::string surname,
-        std::string patronymic) const;
+        const std::string& name,
+        const std::string& surname,
+        const std::string& patronymic) const;
     bool checkStudentPresence(const Student& student);
     double getAverageMark() const;
     void printGroupInfo() const;
