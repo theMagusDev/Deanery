@@ -1,0 +1,21 @@
+46#####
+1 Vladislav Petrov Vasilievich 23CST1 10 7
+4 Olga Smirnova Ivanovna 23CST1 7 9
+3 Petya Petrov Vasilievich 23CST1 5 10
+2 Artem Ivanov Sergeevich 23CST1 7 10
+5 Sergei Kuznetsov Dmitrievich 23CST1 8 9
+6 Maria Popova Alexandrovna 23CST1 4 8
+7 Pavel Morozov Viktorovich 23CST1 9 8
+8 Ekaterina Volkova Petrovna 23CST1 7 10
+9 Dmitri Kozlov Ivanovich 23CST1 5 6
+18 Yulia Tarasova Sergeevna 23CST1 8 7
+23 Mikhail Zaytsev Ivanovich 23CST1 9 5
+10 Anna Yakovleva Sergeevna 23CST1 8 6
+12 Natalia Nikitina Vladimirovna 23MATH1 5 7
+13 Andrey Ilyin Sergeevich 23MATH1 10 2
+14 Alyona Orlova Viktorovna 23MATH1 4 8
+15 Maxim Antonov Ivanovich 23MATH1 7 6
+16 Tatiana Gavrilova Petrovna 23MATH1 9 4
+17 Vladimir Golubev Viktorovich 23MBBE 6 8
+19 Stanislav Sokolov Nikolaevich 23MBBE 5 9
+21 Fedor Egorov Vladimirovich 23MBBE 4 8

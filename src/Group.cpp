@@ -91,13 +91,14 @@ std::string Group::getHead(char separator) const {
 // Function to change student presence in Group instances.
 // Student's fields don't change in this function.
 void Group::addStudent(Student* student) {
+    if (student->getId() == headID) {
+        this->head = student;
+    }
+
     bool studentPresentsInGroup = false;
     for (Student* studentPtr : students) {
         if (studentPtr == student) {
             studentPresentsInGroup = true;
-        }
-        if (student->getId() == headID) {
-            this->head = student;
         }
     }
 
