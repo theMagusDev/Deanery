@@ -17,7 +17,7 @@ int main() {
 //    studentMethodsDemo();
 //    groupMethodsDemo();
 //    deaneryMethodsDemo();
-    deaneryLoadMethod();
+//    deaneryLoadMethod();
 
     return 0;
 }
